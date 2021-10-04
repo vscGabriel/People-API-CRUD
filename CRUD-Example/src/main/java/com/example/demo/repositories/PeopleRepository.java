@@ -8,6 +8,5 @@ import com.example.demo.models.PeopleModel;
 
 public interface PeopleRepository extends JpaRepository<Id,Long> {
 
-	PeopleModel save(PeopleModel person);
 
 }

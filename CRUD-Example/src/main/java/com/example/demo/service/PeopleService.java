@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.persistence.Id;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.models.PeopleModel;
@@ -28,9 +29,18 @@ public class PeopleService {
 	public void deleteById(Long id) {
 		return repo.deleteById(id);
 	}
-
-	public PeopleModel getOne(Long id) {
-		return repo.getOne(id);
+	
+	public PeopleModel update(final Long id, final PeopleModel person) {
+		PeopleModel p = repo.getOne(id);
+		
+		if(p == null) {
+			return null;
+		}
+		p.setName(person.getName());
+		p.setAge(person.getAge());
+		p.setCity(person.getCity());
+		
+		return repo.save(p);
 	}
 
 	public PeopleModel save(PeopleModel person) {

@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,17 +44,9 @@ public class PeopleController {
 	}
 	
 	@PutMapping("/{id}")
-	public PeopleModel upPerson(@RequestBody PeopleModel person, @PathVariable Long id) {
-		PeopleModel p = service.getOne(id);
+	public ResponseEntity<PeopleModel> upPerson(@RequestBody PeopleModel person, @PathVariable Long id) {
+		return ResponseEntity.ok(service.update(id, person));
 		
-		if(p == null) {
-			return null;
-		}
-		p.setName(person.getName());
-		p.setAge(person.getAge());
-		p.setCity(person.getCity());
-		
-		return service.save(p);
 	}
 	
 	@PostMapping("/post")
