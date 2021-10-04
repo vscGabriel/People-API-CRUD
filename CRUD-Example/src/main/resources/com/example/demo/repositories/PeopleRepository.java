@@ -1,13 +1,11 @@
 package com.example.demo.repositories;
 
-import javax.persistence.Id;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.example.demo.models.PeopleModel;
 
-public interface PeopleRepository extends JpaRepository<Id,Long> {
-
-	PeopleModel save(PeopleModel person);
+@Repository
+public interface PeopleRepository extends JpaRepository<PeopleModel, Long>{
 
 }

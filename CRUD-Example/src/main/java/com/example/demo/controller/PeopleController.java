@@ -5,51 +5,47 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.models.PeopleModel;
-import com.example.demo.repositories.PeopleRepository;
+import com.example.demo.service.PeopleService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
-@Api(value = "Swagger2RestController", description = "API Rest for people registration ")
-@RestController
+@Controller
+@RequestMapping("/")
 public class PeopleController {
 	
 	@Autowired
-	private PeopleRepository repo;
+	private PeopleService service;
 	
-	@ApiOperation(value = "Return people registered", response = Iterable.class, tags = "getPeople")
-	@GetMapping
+	@GetMapping("/get")
 	public List<PeopleModel> getPeople(){
-		return repo.findAll();		
+		return service.findAll();		
 	}
 	
-	@ApiOperation(value = "Return person registered by id", response = Iterable.class, tags = "getPerson")
 	@GetMapping("/{id}")
 	public Optional<PeopleModel> getPerson(@PathVariable Long id){
-		return repo.findById(id);
+		return service.findById(id);
 	}
 	
-	@ApiOperation(value = "Delete person by id", response = Iterable.class, tags="deletePerson")
-	@DeleteMapping("/id")
+	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletePerson(@PathVariable Long id) {
-		repo.deleteById(id);
+		service.deleteById(id);
 	}
 	
-	@ApiOperation(value = "Update person by id", response = Iterable.class, tags="upPerson")
 	@PutMapping("/{id}")
 	public PeopleModel upPerson(@RequestBody PeopleModel person, @PathVariable Long id) {
-		PeopleModel p = repo.getOne(id);
+		PeopleModel p = service.getOne(id);
 		
 		if(p == null) {
 			return null;
@@ -57,17 +53,14 @@ public class PeopleController {
 		p.setName(person.getName());
 		p.setAge(person.getAge());
 		p.setCity(person.getCity());
-		p.setMotherName(person.getMotherName());
-		p.setFatherName(person.getFatherName());
 		
-		return repo.save(p);
+		return service.save(p);
 	}
 	
-	@ApiOperation(value = "Register new person", response = Iterable.class, tags = "newPerson")
-	@PostMapping
+	@PostMapping("/post")
 	@ResponseStatus(HttpStatus.CREATED)
 	public PeopleModel newPerson(@RequestBody PeopleModel person) {
-		return repo.save(person);
+		return service.save(person);
 	}
 	
 	
